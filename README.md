@@ -28,6 +28,8 @@ Si vous avez des problèmes sur une command utilisez `ansible --help` et surtout
 - Créer un utilisateur : `user_ansible` sur les **host**
 - Autoriser la connexion **PubkeyAuthentication** depuis le node manager vers les hosts.
 - Créer votre inventaire Ansible
+  - User par défaut
+  - SSH key path 
 - Lancer un ping pour vérifier la communication via Ansible. 
 
 
