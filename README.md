@@ -23,8 +23,9 @@ Si vous avez des problèmes sur une command utilisez `ansible --help` et surtout
 ## Exercice 1: Communication
 
 - Créer 3 machines virtuelles Linux dans le même subnet.
-  - un node manager
+  - un node manager (Vous pouvez réutiliser votre machine Linux de Docker)
   - deux host
+  - **Mettez le même mot de passe root pour les 3 machines**
 - Autoriser la connexion **PubkeyAuthentication** depuis le node manager vers les hosts.
 - Créer votre inventaire Ansible
   - User par défaut : `root`
