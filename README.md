@@ -25,12 +25,17 @@ Si vous avez des problèmes sur une command utilisez `ansible --help` et surtout
 - Créer 3 machines virtuelles Linux dans le même subnet.
   - un node manager
   - deux host
-- Créer un utilisateur : `user_ansible` sur les **host**
 - Autoriser la connexion **PubkeyAuthentication** depuis le node manager vers les hosts.
 - Créer votre inventaire Ansible
-  - User par défaut
+  - User par défaut : `root`
   - SSH key path 
 - Lancer un ping pour vérifier la communication via Ansible. 
+
+## Exercice 2 : Préparation de l'environnement
+
+- Creer l’utilisateur user-ansible sur les nodes
+- Donner les droits sudo à user-ansible
+- Pousser la clef publique de `user_ansible` pour pouvoir lancer les actions via cet utilisateur
 
 
 
