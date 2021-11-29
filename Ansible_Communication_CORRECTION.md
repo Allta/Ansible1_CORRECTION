@@ -69,6 +69,57 @@ Il ne s'agit pas d'un Ping ICMP. Cependant, le résultat du module Ping va être
 
 ## Exercice 2 : Préparation de l'environnement via Ansible
 
+
+Pour cet exercice, j'utilise un playbook qui va permettre d'écrire un jeu d'instruction (ou de tâches) qu'Ansible va ensuite executer sur les différentes machines présentes dans le groupe de l'inventaire. 
+
+
+![image](https://user-images.githubusercontent.com/51991304/143890178-4997a935-5fb5-4905-9377-a62bae84f9ce.png)
+
+Dans chaque playbook Ansible, certaines informations sont obligatoires 
+
+- le nom du groupe sur lequel les taches seront executées
+- les différentes tâches à executer
+
+Les playbook Ansible permettent de faire le lien entre le fichier inventaire et les tâches. 
+
+![image](https://user-images.githubusercontent.com/51991304/143890608-5dadc94f-9326-421d-8865-59152decb4d1.png)
+
+
+Pour exécuter le playbook, il faut lancer la commande `ansible-playbook`. 
+
+Je renseigne le flag `-K`  qui permet de renseigner le mot de passe de l'utilisateur utilisé par Ansible. :
+
+![image](https://user-images.githubusercontent.com/51991304/143890911-f60814ea-9ddb-4506-a2e6-d9f7ae8dbca2.png)
+
+Le module `become` dans le playbook nous oblige a renseigner le mot de passe sudo vu qu'il n'y a pas de configuration `NOPASSWD` sur nos machines distantes dans le fichier `sudoers`.
+
+
+La première tâche du playbook permet de créer un utilisateur avec le module user.
+Les arguments permettent de rajouter cet utilisateur dans le groupe **sudo** sans supprimer les groupes d'appartennance de l'utilisateur (grâce à `append`).
+
+La seconde tâche permet de rajouter la clef **publique** présent sur notre machine Ansible dans les machines distantes. Et d'associer cette clef publique à l'utilisateur fraichement créer. 
+
+Pour cela nous utilisons le module https://docs.ansible.com/ansible/latest/collections/ansible/posix/authorized_key_module.html. 
+Il suffit de spécifier l'utilisateur sur lequel nous souhaitons binder notre clef publique, le **state** (paramètre présent dans de nombreux modules qui permet de spécifier si un fichier/service ou autre doit être présent ou supprimé du systeme distant. Il peut aussi être utilisé pour gérer l'état des services via systemctl). 
+
+Et finalement, il faut renseigner la clef. Ici il faut utiliser une syntaxe particulière (décrit dans la documentation).
+
+La syntaxe utilisé est du **Jinja2** qui permet d'utiliser des templates dans les playbook Ansible.
+
+**lookup** est un **plugin** qui permet d'aller chercher des fichiers en dehors des sources ansible : https://docs.ansible.com/ansible/latest/plugins/lookup.html 
+
+
+Maintenant que notre utilisateur est crée nous pouvons nous connecter dessus à l'aide de notre clef privée.
+
+![image](https://user-images.githubusercontent.com/51991304/143892490-94d9e0ff-6092-49e3-8e2a-e874e1bad2d6.png)
+
+Nous voyons que la clef privée fonctionne et que notre utilisateur est bien présent dans le groupe **sudo**. 
+
+
+
+
+
+
 - Creer l’utilisateur user-ansible sur les nodes
   - Module user (Adhoc ou Playbook : https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html )
 - Donner les droits sudo à user-ansible avec le module user
