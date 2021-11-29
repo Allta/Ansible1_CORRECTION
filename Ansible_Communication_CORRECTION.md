@@ -111,23 +111,55 @@ La syntaxe utilisé est du **Jinja2** qui permet d'utiliser des templates dans l
 
 Maintenant que notre utilisateur est crée nous pouvons nous connecter dessus à l'aide de notre clef privée.
 
-![image](https://user-images.githubusercontent.com/51991304/143892490-94d9e0ff-6092-49e3-8e2a-e874e1bad2d6.png)
+![image](https://user-images.githubusercontent.com/51991304/143894856-9ab194b2-a357-48cf-8884-9d8a9cfcd904.png)
 
 Nous voyons que la clef privée fonctionne et que notre utilisateur est bien présent dans le groupe **sudo**. 
 
+Pour lancer une commande avec un autre utilisateur que celui prévu par défaut dans notre fichier inventaire, nous utilisons le module **become** qui permet de devenir un autre utilisateur.
+
+_**Source :**_ https://serverfault.com/a/741058
+
+
+![image](https://user-images.githubusercontent.com/51991304/143895064-1f338e6d-4378-4efe-b3a1-4f483afcedd3.png)
+
+
+
+Lorsque nous essayons de lancer une commande avec notre utilisateur nous avons une erreur. Ansible n'arrive pas à gérer le passage à un utilisateur sans privilège. 
+
+Il y a un soucis lors de la lecture des fichiers temporaires qui font fonctionner Ansible. 
+
+![image](https://user-images.githubusercontent.com/51991304/143892490-94d9e0ff-6092-49e3-8e2a-e874e1bad2d6.png)
 
 
 
 
 
-- Creer l’utilisateur user-ansible sur les nodes
-  - Module user (Adhoc ou Playbook : https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html )
-- Donner les droits sudo à user-ansible avec le module user
-- Creer et pousser la clef publique de `user_ansible` pour pouvoir lancer les actions via cet utilisateur
-  - Module authorized_keys : https://docs.ansible.com/ansible/latest/collections/ansible/posix/authorized_key_module.html
-- Lancer une commande en sudo (*become*) avec l'utilisateur `user_ansible` : id ou whoami par exemple. 
+Une recherche google nous informes qu'il manque le paquet **acl** d'installer sur nos machines clients. 
+
+_**Source : **_ https://github.com/georchestra/ansible/issues/55
 
 
+Pour corriger cela nous rajoutons une tâche d'installation de ce paquet. 
+
+![image](https://user-images.githubusercontent.com/51991304/143895568-d9932dd9-2ac7-489a-b5c5-a1cd187f61ef.png)
+
+
+Maintenant nous pouvons lancer notre playbook. Cependant nous nous apercevons que la commande est exécutée mais nous n'avons pas l'output de cette commande.
+
+En effet Ansible ne récupère pas l'output des commandes exécutées sur les machines distantes. 
+
+Pour cela soit nous pouvons créer une variable et récupérer l'output et l'afficher dans cette variable grâce au modue **debug** : 
+
+https://stackoverflow.com/questions/20563639/ansible-playbook-shell-output
+
+![image](https://user-images.githubusercontent.com/51991304/143895875-23459deb-0d78-40a3-a15d-b87a6404d951.png)
+
+
+
+Cela nous donne : 
+
+
+![image](https://user-images.githubusercontent.com/51991304/143895938-7c1adb25-e38e-40e2-8db4-005c094aaf0d.png)
 
 
 
